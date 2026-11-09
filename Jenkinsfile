@@ -35,10 +35,20 @@ pipeline {
                 '''
             }
         }
-    }
-    post {
-        always {
-            junit 'test-results/junit.xml'
+
+        stage('Deploy') {
+            agent {
+                docker {
+                    image 'node:22-alpine'
+                    reuseNode true
+                }
+            }
+            steps {
+                sh '''
+                npm install -g netlify-cli
+                netlify --version
+                '''
+            }
         }
     }
 }
